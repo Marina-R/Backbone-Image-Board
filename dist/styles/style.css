@@ -1,0 +1,132 @@
+html, body {
+	background: #EDEEEF;
+	height: 100%;
+}
+#main {
+	top: 10%;
+	left: 10%;
+	position: absolute;
+	background: #E0E1E2;
+	height: auto;
+}
+#header {
+	height: 10%;
+	background: #486E99;
+}
+#add {
+	width: 65px;
+	height: 65px;
+	background-image: url(../images/add.png);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	margin-left: 5%;
+	cursor: pointer;
+}
+#add-post {
+	display: none;
+	width: 100%;
+	background: white;
+	height: 35%;
+	overflow: hidden;
+}
+#input1, #input2 {
+	width: 100%;
+	height: 40px;
+	margin-top: 20px;
+	display: inline-block;
+	text-align: center;
+}
+#input1 > input, #input2 > textarea {
+	width: 70%;
+	height: 100%;
+}
+#buttons {
+	margin: 15px auto;
+	width: 70%;
+	height: 50px;
+}
+#btn1, #btn2 {
+	width: 100px;
+	height: 80%;
+	float: right;
+	margin: auto 15px;
+}
+#img {
+	display: inline-block;
+	height: 90%;
+	width: 30%;
+	background-image: url(../images/img-icon.png);
+	background-size: cover;
+}
+button {
+	height: 100%;
+	width: 100%;
+}
+#add-image {
+	background: #17AA56;
+	border-radius: 5px;
+}
+#btn1 {
+	font-size: 14px;
+	width: 160px;
+	color: white;
+}
+#btn1 > div {
+	display: inline-block;
+	float: left; 
+}
+#add-it {
+	display: inline-block;
+	vertical-align: middle;
+	height: 100%;
+	margin-left: 5px;
+}
+#cancel {
+	border-radius: 5px;
+	background: #B6B6B6;
+	color: white;
+	font-size: 14px;
+}
+::-webkit-input-placeholder {
+   font-size: 13px;
+}
+#board {
+	width: 80%;
+	margin: 0 auto;
+}
+#img-div {
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+	background-size: cover;
+}
+#caption {
+	height: 40px;
+	background: white;
+	padding-top: 10px;
+	text-align: center;
+}
+#url-error {
+	margin-top: 10px;
+}
+#url-error, #caption-error {
+	display: none;
+	text-align: center;
+	color: red;
+	font-size: 12px;
+}
+#new-post {
+	margin-top: 40px;
+}
+@media(max-width: 600px) {
+	#main {
+		width: 100%;
+		left: 0;
+	}
+}
+@media(min-width: 601px) {
+	#main {
+		width: 80%;
+		margin: 0 auto;
+	}
+}
