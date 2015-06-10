@@ -1,6 +1,23 @@
+var $ = require('jquery');
+var Backbone = require('backbone');
+var _ = require('backbone/node_modules/underscore');
+Backbone.$ = $;
+
 $(document).ready(function() {
-	var ImgBoard = new ImgCollection();
-	ImgBoard.fetch();
+	var ImgCollection = require('./collections/image-collection.js');
+	var MyImage = require('./models/image-model.js');
+	var ImgBoard = new ImgCollection;
+
+	ImgBoard.fetch({
+		success: function(ImgCollection) {
+			ImgCollection.forEach(function(model){
+				$('#img-board').append(imgPoster(model.attributes));
+			})
+			ImgCollection.on('add', function(image){
+				$('#img-board').prepend(imgPoster(image.attributes));
+			})
+		}
+	});
 	var imgPoster = _.template($('#to-post').html());
 
 	$('#add').click(function() {
@@ -24,11 +41,10 @@ $(document).ready(function() {
 	});
 	$('#btn2').click(function(e) {
 		e.preventDefault();
+		$('#img-url').val('');
+		$('#img-text').val('');
+		$('#url-error').hide();
+		$('#caption-error').hide();
 		$('#add-post').hide();
-	})
-	ImgBoard.on('add', function(model) {
-		var newImg = imgPoster(model.attributes);
-		$('#img-board').append(newImg);
-
 	});
 })

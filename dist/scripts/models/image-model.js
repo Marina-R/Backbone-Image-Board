@@ -1,15 +1,26 @@
-var MyImage = Backbone.Model.extend({
+var $ = require('jquery');
+var Backbone = require('backbone');
+var _ = require('backbone/node_modules/underscore');
+Backbone.$ = $;
+
+module.exports = Backbone.Model.extend({
 	defaults: {
 		img: null,
 		caption: null
 	},
 	validate: function (attr, options) {
-		if(attr.img.substr(0,7) !== 'http://') {
-			console.log(attr.img.substr(0,7));
-			console.log('error');
+		if((attr.img.substr(0,7) == 'http://' || attr.img.substr(0,8) == 'https://')
+			&&  attr.caption.length !== 0) {
+			// console.log(attr.img.substr(0,7));
+			// console.log('error');
+			// $('#url-error').show();
+			// return true;
+			return false;
+		} else if(!(attr.img.substr(0,7) == 'http://' || attr.img.substr(0,8) == 'https://')) {
 			$('#url-error').show();
 			return true;
-		} else if(attr.caption.length === 0) {
+		} else if(attr.caption.length == 0) {
+			$('#url-error').hide();
 			$('#caption-error').show();
 			return true;
 		}
