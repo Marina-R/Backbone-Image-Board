@@ -6,19 +6,56 @@ Backbone.$ = $;
 $(document).ready(function() {
 	var ImgCollection = require('./collections/image-collection.js');
 	var MyImage = require('./models/image-model.js');
-	var ImgBoard = new ImgCollection;
+	var ImgBoard = new ImgCollection();
+	var Comment = require('./models/comment-model.js');
+	var CommentsCollection = require('./collections/comments-collection.js');
+	var CommentBoard = new CommentsCollection();
 
 	ImgBoard.fetch({
 		success: function(ImgCollection) {
 			ImgCollection.forEach(function(model){
 				$('#img-board').append(imgPoster(model.attributes));
-			})
-			ImgCollection.on('add', function(image){
+			});
+			ImgBoard.on('add', function(image){
 				$('#img-board').prepend(imgPoster(image.attributes));
-			})
+			});
+
+			CommentBoard.fetch({
+				success: function(CommentsCollection) {
+					CommentsCollection.forEach(function(model){
+						$('#user-comments').append(comPoster(model.attributes));
+					});
+					CommentBoard.on('add', function(comment){
+						$('#user-comments').prepend(comPoster(comment.attributes));
+							$('#like-btn').click(function() {
+				console.log('hello');
+			});
+					});
+				}
+			});
+
+			$('#comment').submit(function(e) {
+				e.preventDefault();
+				var UserComment = new Comment({
+					msg: $('#comment-input').val(),
+					time: (function setTime() {
+						var date = new Date();
+						var today = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+						return today;
+					})()
+				});
+				if(UserComment.isValid()) {
+					CommentBoard.comparator = '_id';
+					CommentBoard.add(UserComment);
+					UserComment.save();
+					$('#comment-input').val('');
+				}
+			});
 		}
 	});
+
 	var imgPoster = _.template($('#to-post').html());
+	var comPoster = _.template($('#comments').html());
 
 	$('#add').click(function() {
 		$('#add-post').show();

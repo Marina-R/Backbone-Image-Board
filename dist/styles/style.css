@@ -118,6 +118,70 @@ button {
 #new-post {
 	margin-top: 40px;
 }
+#comment {
+	height: 25px;
+}
+#comment-icon {
+	background: url(../images/comment.jpg);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 100%;
+	float: left;
+	margin: 5px;
+}
+#comment-input {
+	height: 100%;
+	min-width: 87%;
+	margin-top: 3px;
+}
+#comment-error {
+	display: none;
+	color: red;
+	font-size: 10px;
+	width: 100%;
+	text-align: center;
+}
+#comment-box {
+	margin: 2px;
+	padding: 2px;
+	-webkit-box-shadow: 6px 3px 9px -3px rgba(0,0,0,0.4);
+	-moz-box-shadow: 6px 3px 9px -3px rgba(0,0,0,0.4);
+	box-shadow: 6px 3px 9px -3px rgba(0,0,0,0.4);
+}
+#like-btn{
+	display: inline-block;
+	float: left;
+	background: url(../images/like.gif);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	height: 20px;
+	width: 20px;
+	cursor: pointer;
+}
+#like-counter {
+	display: inline-block;
+	float: left;
+	margin-left: 5px;
+}
+#date {
+	display: inline-block;
+	float: right;
+}
+#user-comments {
+	/*display: none;*/
+	font-size: 13px;
+}
+#text {
+	height: 20px;
+	padding-top: 10px;
+	text-align: left;
+}
+#extra {
+	position: relative;
+	bottom: 0;
+	height: 20px;
+}
 @media(max-width: 600px) {
 	#main {
 		width: 100%;

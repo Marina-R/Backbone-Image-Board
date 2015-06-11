@@ -12643,13 +12643,25 @@ var Backbone = require('backbone');
 var _ = require('backbone/node_modules/underscore');
 Backbone.$ = $;
 
+var Comment = require('../models/comment-model.js'); 
+
+module.exports = Backbone.Collection.extend({
+	model: Comment,
+	url: 'http://tiny-pizza-server.herokuapp.com/collections/marina-comments'
+}) 
+},{"../models/comment-model.js":7,"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}],5:[function(require,module,exports){
+var $ = require('jquery');
+var Backbone = require('backbone');
+var _ = require('backbone/node_modules/underscore');
+Backbone.$ = $;
+
 var MyImage = require('../models/image-model.js');
 
 module.exports = Backbone.Collection.extend ({
 	model: MyImage,
 	url: 'http://tiny-pizza-server.herokuapp.com/collections/marina-collection'
 })
-},{"../models/image-model.js":6,"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}],5:[function(require,module,exports){
+},{"../models/image-model.js":8,"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}],6:[function(require,module,exports){
 var $ = require('jquery');
 var Backbone = require('backbone');
 var _ = require('backbone/node_modules/underscore');
@@ -12658,19 +12670,56 @@ Backbone.$ = $;
 $(document).ready(function() {
 	var ImgCollection = require('./collections/image-collection.js');
 	var MyImage = require('./models/image-model.js');
-	var ImgBoard = new ImgCollection;
+	var ImgBoard = new ImgCollection();
+	var Comment = require('./models/comment-model.js');
+	var CommentsCollection = require('./collections/comments-collection.js');
+	var CommentBoard = new CommentsCollection();
 
 	ImgBoard.fetch({
 		success: function(ImgCollection) {
 			ImgCollection.forEach(function(model){
 				$('#img-board').append(imgPoster(model.attributes));
-			})
-			ImgCollection.on('add', function(image){
+			});
+			ImgBoard.on('add', function(image){
 				$('#img-board').prepend(imgPoster(image.attributes));
-			})
+			});
+
+			CommentBoard.fetch({
+				success: function(CommentsCollection) {
+					CommentsCollection.forEach(function(model){
+						$('#user-comments').append(comPoster(model.attributes));
+					});
+					CommentBoard.on('add', function(comment){
+						$('#user-comments').prepend(comPoster(comment.attributes));
+							$('#like-btn').click(function() {
+				console.log('hello');
+			});
+					});
+				}
+			});
+
+			$('#comment').submit(function(e) {
+				e.preventDefault();
+				var UserComment = new Comment({
+					msg: $('#comment-input').val(),
+					time: (function setTime() {
+						var date = new Date();
+						var today = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+						return today;
+					})()
+				});
+				if(UserComment.isValid()) {
+					CommentBoard.comparator = '_id';
+					CommentBoard.add(UserComment);
+					UserComment.save();
+					$('#comment-input').val('');
+				}
+			});
 		}
 	});
+
 	var imgPoster = _.template($('#to-post').html());
+	var comPoster = _.template($('#comments').html());
 
 	$('#add').click(function() {
 		$('#add-post').show();
@@ -12700,7 +12749,30 @@ $(document).ready(function() {
 		$('#add-post').hide();
 	});
 })
-},{"./collections/image-collection.js":4,"./models/image-model.js":6,"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}],6:[function(require,module,exports){
+},{"./collections/comments-collection.js":4,"./collections/image-collection.js":5,"./models/comment-model.js":7,"./models/image-model.js":8,"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}],7:[function(require,module,exports){
+var $ = require('jquery');
+var Backbone = require('backbone');
+var _ = require('backbone/node_modules/underscore');
+Backbone.$ = $;
+
+module.exports = Backbone.Model.extend({
+	defaults: {
+		msg: null,
+		time: null,
+		likes: 0
+	},
+	validate: function(attr, options) {
+		if(attr.msg.length == 0) {
+			$('#comment-error').show();
+			return true;
+		}
+		$('#comment-error').hide();
+		return false;
+	},
+	urlRoot: 'http://tiny-pizza-server.herokuapp.com/collections/marina-comments',
+	idAttribute: '_id'
+}); 
+},{"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}],8:[function(require,module,exports){
 var $ = require('jquery');
 var Backbone = require('backbone');
 var _ = require('backbone/node_modules/underscore');
@@ -12732,4 +12804,4 @@ module.exports = Backbone.Model.extend({
 	urlRoot: 'http://tiny-pizza-server.herokuapp.com/collections/marina-collection',
 	idAttribute: '_id'
 })
-},{"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}]},{},[5]);
+},{"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}]},{},[6]);
