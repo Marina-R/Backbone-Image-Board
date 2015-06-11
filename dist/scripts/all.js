@@ -12691,9 +12691,6 @@ $(document).ready(function() {
 					});
 					CommentBoard.on('add', function(comment){
 						$('#user-comments').prepend(comPoster(comment.attributes));
-							$('#like-btn').click(function() {
-				console.log('hello');
-			});
 					});
 				}
 			});
@@ -12714,6 +12711,9 @@ $(document).ready(function() {
 					UserComment.save();
 					$('#comment-input').val('');
 				}
+			});
+			$('#like-btn').click(function() {
+				console.log('hello');
 			});
 		}
 	});
