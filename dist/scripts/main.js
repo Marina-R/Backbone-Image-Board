@@ -12,45 +12,8 @@ $(document).ready(function() {
 	var CommentBoard = new CommentsCollection();
 
 	ImgBoard.fetch({
-		success: function(ImgCollection) {
-			ImgCollection.forEach(function(model){
-				$('#img-board').append(imgPoster(model.attributes));
-			});
-			ImgBoard.on('add', function(image){
-				$('#img-board').prepend(imgPoster(image.attributes));
-			});
-
-			CommentBoard.fetch({
-				success: function(CommentsCollection) {
-					CommentsCollection.forEach(function(model){
-						$('#user-comments').append(comPoster(model.attributes));
-					});
-					CommentBoard.on('add', function(comment){
-						$('#user-comments').prepend(comPoster(comment.attributes));
-					});
-				}
-			});
-
-			$('#comment').submit(function(e) {
-				e.preventDefault();
-				var UserComment = new Comment({
-					msg: $('#comment-input').val(),
-					time: (function setTime() {
-						var date = new Date();
-						var today = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
-						return today;
-					})()
-				});
-				if(UserComment.isValid()) {
-					CommentBoard.comparator = '_id';
-					CommentBoard.add(UserComment);
-					UserComment.save();
-					$('#comment-input').val('');
-				}
-			});
-			$('#like-btn').click(function() {
-				console.log('hello');
-			});
+		success: function() {
+			CommentBoard.fetch();
 		}
 	});
 
@@ -83,5 +46,51 @@ $(document).ready(function() {
 		$('#url-error').hide();
 		$('#caption-error').hide();
 		$('#add-post').hide();
+	});	
+
+	ImgBoard.on('add', function(image){
+		$('#img-board').append(imgPoster({model: image}));
+		$('[data-form-cid="' + image.cid + '"]').on('submit', function(e) {
+			e.preventDefault();
+			var $commentInput = $(this).find('.comment-input');
+			var UserComment = new Comment({
+				msg: $commentInput.val(),
+				imageId: image.get('_id'),
+				time: (function setTime() {
+					var date = new Date();
+					var today = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+					return today;
+				})(),
+				likes: image.get('likes')
+			});
+			if(UserComment.isValid()) {
+				CommentBoard.comparator = '_id';
+				CommentBoard.add(UserComment);
+				UserComment.save();
+				$('.comment-input').val('');
+			};
+		})
 	});
+
+	CommentBoard.on('add', function(addedComment) {
+		var commentHtml = comPoster({model: addedComment});
+		var imageId = addedComment.get('imageId');
+		var imageModel = ImgBoard.get(imageId);
+		if(imageModel) {
+			$('[data-cid="' + imageModel.cid + '"] .user-comments').append(commentHtml);
+		};
+		$('[data-cid="' + imageModel.cid + '"] .like-btn').on('click', function() {
+			var likes = addedComment.get('likes');
+			likes++;
+			console.log(likes);
+			addedComment.set({likes: likes});
+			var $numOfLikes = $('[data-btn-cid="' + imageModel.cid + '"] .like-counter').html();
+			$numOfLikes = likes;
+			// $numOfLikes.html()
+			// console.log($numOfLikes);
+
+		});
+	});
+
+	
 })

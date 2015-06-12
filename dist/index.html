@@ -35,25 +35,27 @@
 
 
 	<script type="text/template" id='to-post'>
-		<div id='new-post'>
-			<div id='img-div'><img src='<%= img %>' style="width: inherit">
-				<div id='caption'><%= caption %></div>
-				<div id='user-comments'></div>
-				<form id='comment'>
-					<img id='comment-icon' src='images/comment.jpg'>
-					<input id='comment-input' type='text' placeholder='Add your comment...'>
-					<div id='comment-error'>Please enter your comment</div>
-				</form>		
+		<div class='new-post'>
+			<div class='img-div' data-cid='<%= model.cid %>'>
+				<img src='<%= model.get("img") %>' style="width: inherit">
+				<div class='caption'><%= model.get('caption') %></div>
+				<form class='comment' data-form-cid='<%= model.cid %>'>
+					<img class='comment-icon' src='images/comment.jpg'>
+					<input class='comment-input' type='text' placeholder='Add your comment...'>
+					<div class='comment-error'>Please enter your comment</div>
+				</form>	
+				<div class='user-comments'></div>	
 			</div>
 		</div>	
 	</script>
 	<script type="text/template" id='comments'>
-		<div id='comment-box'>
-			<div id='text'><%= msg %></div>
-			<div id='extra'>
-				<div id='like-btn'></div>
-				<div id='like-counter'><%= likes %></div>
-				<div id='date'><%= time %></div>
+		<div class='comment-box' data-cid='<%= model.cid %>'>
+			<div class='text'><%= model.get('msg') %></div>
+			<div class='extra'>
+				<div class='like-btn' data-btn-cid='<%= model.cid %>'>
+					<div class='like-counter'><%= model.get('likes') %></div>
+				</div>
+				<div class='date'><%= model.get('time') %></div>
 			</div>
 		</div>
 	</script>

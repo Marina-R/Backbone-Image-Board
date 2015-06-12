@@ -12676,45 +12676,8 @@ $(document).ready(function() {
 	var CommentBoard = new CommentsCollection();
 
 	ImgBoard.fetch({
-		success: function(ImgCollection) {
-			ImgCollection.forEach(function(model){
-				$('#img-board').append(imgPoster(model.attributes));
-			});
-			ImgBoard.on('add', function(image){
-				$('#img-board').prepend(imgPoster(image.attributes));
-			});
-
-			CommentBoard.fetch({
-				success: function(CommentsCollection) {
-					CommentsCollection.forEach(function(model){
-						$('#user-comments').append(comPoster(model.attributes));
-					});
-					CommentBoard.on('add', function(comment){
-						$('#user-comments').prepend(comPoster(comment.attributes));
-					});
-				}
-			});
-
-			$('#comment').submit(function(e) {
-				e.preventDefault();
-				var UserComment = new Comment({
-					msg: $('#comment-input').val(),
-					time: (function setTime() {
-						var date = new Date();
-						var today = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
-						return today;
-					})()
-				});
-				if(UserComment.isValid()) {
-					CommentBoard.comparator = '_id';
-					CommentBoard.add(UserComment);
-					UserComment.save();
-					$('#comment-input').val('');
-				}
-			});
-			$('#like-btn').click(function() {
-				console.log('hello');
-			});
+		success: function() {
+			CommentBoard.fetch();
 		}
 	});
 
@@ -12747,7 +12710,53 @@ $(document).ready(function() {
 		$('#url-error').hide();
 		$('#caption-error').hide();
 		$('#add-post').hide();
+	});	
+
+	ImgBoard.on('add', function(image){
+		$('#img-board').append(imgPoster({model: image}));
+		$('[data-form-cid="' + image.cid + '"]').on('submit', function(e) {
+			e.preventDefault();
+			var $commentInput = $(this).find('.comment-input');
+			var UserComment = new Comment({
+				msg: $commentInput.val(),
+				imageId: image.get('_id'),
+				time: (function setTime() {
+					var date = new Date();
+					var today = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear();
+					return today;
+				})(),
+				likes: image.get('likes')
+			});
+			if(UserComment.isValid()) {
+				CommentBoard.comparator = '_id';
+				CommentBoard.add(UserComment);
+				UserComment.save();
+				$('.comment-input').val('');
+			};
+		})
 	});
+
+	CommentBoard.on('add', function(addedComment) {
+		var commentHtml = comPoster({model: addedComment});
+		var imageId = addedComment.get('imageId');
+		var imageModel = ImgBoard.get(imageId);
+		if(imageModel) {
+			$('[data-cid="' + imageModel.cid + '"] .user-comments').append(commentHtml);
+		};
+		$('[data-cid="' + imageModel.cid + '"] .like-btn').on('click', function() {
+			var likes = addedComment.get('likes');
+			likes++;
+			console.log(likes);
+			addedComment.set({likes: likes});
+			var $numOfLikes = $('[data-btn-cid="' + imageModel.cid + '"] .like-counter').html();
+			$numOfLikes = likes;
+			// $numOfLikes.html()
+			// console.log($numOfLikes);
+
+		});
+	});
+
+	
 })
 },{"./collections/comments-collection.js":4,"./collections/image-collection.js":5,"./models/comment-model.js":7,"./models/image-model.js":8,"backbone":1,"backbone/node_modules/underscore":2,"jquery":3}],7:[function(require,module,exports){
 var $ = require('jquery');
@@ -12757,16 +12766,18 @@ Backbone.$ = $;
 
 module.exports = Backbone.Model.extend({
 	defaults: {
+		_id: null,
 		msg: null,
 		time: null,
-		likes: 0
+		likes: 0,
+		imageId: null
 	},
 	validate: function(attr, options) {
 		if(attr.msg.length == 0) {
-			$('#comment-error').show();
+			$('.comment-error').show();
 			return true;
 		}
-		$('#comment-error').hide();
+		$('.comment-error').hide();
 		return false;
 	},
 	urlRoot: 'http://tiny-pizza-server.herokuapp.com/collections/marina-comments',
@@ -12780,16 +12791,13 @@ Backbone.$ = $;
 
 module.exports = Backbone.Model.extend({
 	defaults: {
+		_id: null, 
 		img: null,
 		caption: null
 	},
 	validate: function (attr, options) {
 		if((attr.img.substr(0,7) == 'http://' || attr.img.substr(0,8) == 'https://')
 			&&  attr.caption.length !== 0) {
-			// console.log(attr.img.substr(0,7));
-			// console.log('error');
-			// $('#url-error').show();
-			// return true;
 			return false;
 		} else if(!(attr.img.substr(0,7) == 'http://' || attr.img.substr(0,8) == 'https://')) {
 			$('#url-error').show();

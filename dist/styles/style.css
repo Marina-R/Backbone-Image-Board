@@ -94,13 +94,13 @@ button {
 	width: 80%;
 	margin: 0 auto;
 }
-#img-div {
+.img-div {
 	display: inline-block;
 	text-align: center;
 	width: 100%;
 	background-size: cover;
 }
-#caption {
+.caption {
 	height: 40px;
 	background: white;
 	padding-top: 10px;
@@ -115,13 +115,13 @@ button {
 	color: red;
 	font-size: 12px;
 }
-#new-post {
+.new-post {
 	margin-top: 40px;
 }
-#comment {
+.comment {
 	height: 25px;
 }
-#comment-icon {
+.comment-icon {
 	background: url(../images/comment.jpg);
 	background-size: 100%;
 	background-repeat: no-repeat;
@@ -130,26 +130,26 @@ button {
 	float: left;
 	margin: 5px;
 }
-#comment-input {
+.comment-input {
 	height: 100%;
 	min-width: 87%;
 	margin-top: 3px;
 }
-#comment-error {
+.comment-error {
 	display: none;
 	color: red;
 	font-size: 10px;
 	width: 100%;
 	text-align: center;
 }
-#comment-box {
+.comment-box {
 	margin: 2px;
 	padding: 2px;
 	-webkit-box-shadow: 6px 3px 9px -3px rgba(0,0,0,0.4);
 	-moz-box-shadow: 6px 3px 9px -3px rgba(0,0,0,0.4);
 	box-shadow: 6px 3px 9px -3px rgba(0,0,0,0.4);
 }
-#like-btn{
+.like-btn{
 	display: inline-block;
 	float: left;
 	background: url(../images/like.gif);
@@ -159,25 +159,25 @@ button {
 	width: 20px;
 	cursor: pointer;
 }
-#like-counter {
+.like-counter {
 	display: inline-block;
 	float: left;
-	margin-left: 5px;
+	margin-left: 25px;
 }
-#date {
+.date {
 	display: inline-block;
 	float: right;
 }
-#user-comments {
+.user-comments {
 	/*display: none;*/
 	font-size: 13px;
 }
-#text {
+.text {
 	height: 20px;
 	padding-top: 10px;
 	text-align: left;
 }
-#extra {
+.extra {
 	position: relative;
 	bottom: 0;
 	height: 20px;
