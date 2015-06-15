@@ -79,12 +79,12 @@ $(document).ready(function() {
 		if(imageModel) {
 			$('[data-cid="' + imageModel.cid + '"] .user-comments').append(commentHtml);
 		};
-		$('[data-cid="' + imageModel.cid + '"] .like-btn').on('click', function() {
+		$('[data-btn-cid="' + addedComment.cid + '"]').on('click', function() {
 			var likes = addedComment.get('likes');
 			likes++;
 			console.log(likes);
 			addedComment.set({likes: likes});
-			var $numOfLikes = $('[data-btn-cid="' + imageModel.cid + '"] .like-counter').html();
+			var $numOfLikes = $('[data-cid="' + imageModel.cid + '"] .like-counter').html();
 			$numOfLikes = likes;
 			// $numOfLikes.html()
 			// console.log($numOfLikes);
